@@ -12,13 +12,12 @@ static lv_disp_buf_t disp_buf;
 static lv_color_t buf[LV_HOR_RES_MAX * 10];
 TouchScreen touchscreen;
 int ledstate = 1;
-#if USE_LV_LOG != 0
+#if LV_USE_LOG != 0
 /* Serial debugging */
-void my_print(lv_log_level_t level, const char * file, uint32_t line, const char * dsc)
+void my_print(lv_log_level_t level, const char * file, unsigned int line, const char *fn, const char * dsc)
 {
-
-  Serial.printf("%s@%d->%s\r\n", file, line, dsc);
-  delay(100);
+  Serial.printf("%s@%d->%s() %s\r\n", file, line, fn, dsc);
+  // delay(100);
 }
 #endif
 
@@ -95,8 +94,8 @@ void setup() {
   lv_init();
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN,ledstate);//power off led
-#if USE_LV_LOG != 0
-  lv_log_register_print(my_print); /* register print function for debugging */
+#if LV_USE_LOG != 0
+  lv_log_register_print_cb(my_print); /* register print function for debugging */
 #endif
 
   lv_disp_buf_init(&disp_buf, buf, NULL, LV_HOR_RES_MAX * 10);
@@ -133,7 +132,7 @@ void setup() {
   lv_obj_t * btn2 = lv_btn_create(lv_scr_act(), NULL);
   lv_obj_set_event_cb(btn2, event_handler);
   lv_obj_align(btn2, NULL, LV_ALIGN_CENTER, 0, 40);
-  lv_btn_set_toggle(btn2, true);
+  lv_btn_set_checkable(btn2, true);
   lv_btn_toggle(btn2);
   lv_btn_set_fit2(btn2, LV_FIT_NONE, LV_FIT_TIGHT);
 

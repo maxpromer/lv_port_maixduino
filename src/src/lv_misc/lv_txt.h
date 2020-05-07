@@ -13,11 +13,7 @@ extern "C" {
 /*********************
  *      INCLUDES
  *********************/
-#ifdef LV_CONF_INCLUDE_SIMPLE
-#include "lv_conf.h"
-#else
-#include "../../../lv_conf.h"
-#endif
+#include "../lv_conf_internal.h"
 
 #include <stdbool.h>
 #include "lv_area.h"
@@ -27,7 +23,9 @@ extern "C" {
 /*********************
  *      DEFINES
  *********************/
+#ifndef LV_TXT_COLOR_CMD
 #define LV_TXT_COLOR_CMD "#"
+#endif
 
 #define LV_TXT_ENC_UTF8 1
 #define LV_TXT_ENC_ASCII 2
@@ -41,9 +39,10 @@ extern "C" {
 enum {
     LV_TXT_FLAG_NONE    = 0x00,
     LV_TXT_FLAG_RECOLOR = 0x01, /**< Enable parsing of recolor command*/
-    LV_TXT_FLAG_EXPAND  = 0x02, /**< Ignore width to avoid automatic word wrapping*/
+    LV_TXT_FLAG_EXPAND  = 0x02, /**< Ignore max-width to avoid automatic word wrapping*/
     LV_TXT_FLAG_CENTER  = 0x04, /**< Align the text to the middle*/
     LV_TXT_FLAG_RIGHT   = 0x08, /**< Align the text to the right*/
+    LV_TXT_FLAG_FIT     = 0x10, /**< Max-width is already equal to the longest line. (Used to skip some calculation)*/
 };
 typedef uint8_t lv_txt_flag_t;
 
@@ -188,7 +187,7 @@ extern uint32_t (*lv_txt_encoded_get_byte_id)(const char *, uint32_t);
  * @param byte_id byte index
  * @return character index of the letter at 'byte_id'th position
  */
-extern uint32_t (*lv_encoded_get_char_id)(const char *, uint32_t);
+extern uint32_t (*lv_txt_encoded_get_char_id)(const char *, uint32_t);
 
 /**
  * Get the number of characters (and NOT bytes) in a string.

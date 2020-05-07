@@ -3,11 +3,11 @@
 /*******************************************************************************
  * Size: 8 px
  * Bpp: 1
- * Opts: 
+ * Opts:
  ******************************************************************************/
 
 #ifndef LV_FONT_UNSCII_8
-#define LV_FONT_UNSCII_8 1
+    #define LV_FONT_UNSCII_8 1
 #endif
 
 #if LV_FONT_UNSCII_8
@@ -311,7 +311,7 @@ static LV_ATTRIBUTE_LARGE_CONST const uint8_t gylph_bitmap[] = {
  *  GLYPH DESCRIPTION
  *--------------------*/
 
-static lv_font_fmt_txt_glyph_dsc_t glyph_dsc[] = {
+static const lv_font_fmt_txt_glyph_dsc_t glyph_dsc[] = {
     {.bitmap_index = 0, .adv_w = 0, .box_h = 0, .box_w = 0, .ofs_x = 0, .ofs_y = 0} /* id = 0 reserved */,
     {.bitmap_index = 0, .adv_w = 128, .box_h = 0, .box_w = 0, .ofs_x = 0, .ofs_y = 0},
     {.bitmap_index = 0, .adv_w = 128, .box_h = 7, .box_w = 1, .ofs_x = 3, .ofs_y = -1},
@@ -418,8 +418,7 @@ static lv_font_fmt_txt_glyph_dsc_t glyph_dsc[] = {
 
 
 /*Collect the unicode lists and glyph_id offsets*/
-static const lv_font_fmt_txt_cmap_t cmaps[] =
-{
+static const lv_font_fmt_txt_cmap_t cmaps[] = {
     {
         .range_start = 32, .range_length = 96, .type = LV_FONT_FMT_TXT_CMAP_FORMAT0_TINY,
         .glyph_id_start = 1, .unicode_list = NULL, .glyph_id_ofs_list = NULL, .list_length = 0
@@ -460,4 +459,3 @@ lv_font_t lv_font_unscii_8 = {
 };
 
 #endif /*#if LV_FONT_UNSCII_8*/
-

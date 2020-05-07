@@ -9,13 +9,12 @@ Ticker tick; /* timer for interrupt handler */
 Sipeed_ST7789 lcd(320, 240, spi_);
 static lv_disp_buf_t disp_buf;
 static lv_color_t buf[LV_HOR_RES_MAX * 10];
-#if USE_LV_LOG != 0
+#if LV_USE_LOG != 0
 /* Serial debugging */
-void my_print(lv_log_level_t level, const char * file, uint32_t line, const char * dsc)
+void my_print(lv_log_level_t level, const char * file, unsigned int line, const char *fn, const char * dsc)
 {
-
-  Serial.printf("%s@%d->%s\r\n", file, line, dsc);
-  delay(100);
+  Serial.printf("%s@%d->%s() %s\r\n", file, line, fn, dsc);
+  // delay(100);
 }
 #endif
 
@@ -45,7 +44,6 @@ void my_disp_flush(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color
 /* Interrupt driven periodic handler */
 static void lv_tick_handler(void)
 {
-
   lv_tick_inc(LVGL_TICK_PERIOD);
 }
 
@@ -67,12 +65,14 @@ bool read_encoder(lv_indev_drv_t * indev, lv_indev_data_t * data)
 void setup() {
 
   Serial.begin(115200); /* prepare for possible serial debug */
+  
   lcd.begin(15000000, COLOR_WHITE);
-  lv_init();
-
-#if USE_LV_LOG != 0
-  lv_log_register_print(my_print); /* register print function for debugging */
+   
+#if LV_USE_LOG != 0
+  lv_log_register_print_cb(my_print); /* register print function for debugging */
 #endif
+
+  lv_init();
 
   lv_disp_buf_init(&disp_buf, buf, NULL, LV_HOR_RES_MAX * 10);
   /*Initialize the display*/
@@ -83,7 +83,6 @@ void setup() {
   disp_drv.flush_cb = my_disp_flush;
   disp_drv.buffer = &disp_buf;
   lv_disp_drv_register(&disp_drv);
-
 
   /*Initialize the touch pad*/
   lv_indev_drv_t indev_drv;
@@ -97,13 +96,12 @@ void setup() {
 
   /* Create simple label */
   lv_obj_t *label = lv_label_create(lv_scr_act(), NULL);
-  lv_label_set_text(label, "Hello Maixduino! (V6.0)");
+  lv_label_set_text(label, "Hello Maixduino! (V7.0)");
   lv_obj_align(label, NULL, LV_ALIGN_CENTER, 0, 0);
 }
 
 
 void loop() {
-
   lv_task_handler(); /* let the GUI do its work */
   delay(5);
 }
